@@ -3,7 +3,7 @@ def getData():
     data = []
     for line in file:
         data.append(line.strip().split(" "))
-
+    print(len(data))
     return data
 
 def checkFiveOfAKind(hand):
@@ -83,8 +83,7 @@ for index, hand in enumerate(data):
                 if not checkThreeOfAKind(char_arr):
                     if not checkTwoPairs(char_arr):
                         if not checkOnePair(char_arr):
-                            if checkHighCard(char_arr):
-                                results.append([1, hand[1], hand[0]])
+                            results.append([1, hand[1], hand[0]])
                         else:
                             results.append([2, hand[1], hand[0]])
                     else:
@@ -98,34 +97,44 @@ for index, hand in enumerate(data):
     else:
         results.append([7, hand[1], hand[0]])
 
+print(len(results))
+
 sorted_results = sorted(results, key=lambda x: x[0])
-print(sorted_results)
+print("Len:", len(sorted_results), "Arr:", sorted_results)
 
 
-for index, res in enumerate(sorted_results):
-    if index < len(sorted_results) - 1:
-        if res[0] == sorted_results[index + 1][0]:
-            hand1 = res[2]
-            hand2 = sorted_results[index + 1][2]
-            print("Hand 1:", hand1, "Hand 2:", hand2)
-            for index, cahr in enumerate(hand1):
-                if card_value.index(hand1[index]) > card_value.index(hand2[index]):
-                    print("Hand 1 wins")
-                    print("switching...")
-                    sorted_results[index], sorted_results[index + 1] = sorted_results[index + 1], sorted_results[index]
-                    print(sorted_results)
-                    break
-                elif card_value.index(hand1[index]) < card_value.index(hand2[index]):
-                    print("Hand 2 wins")
-                    break
-                else:
-                    continue
+def compare_hands(hand1, hand2):
+    for index, char in enumerate(hand1):
+        if card_value.index(hand1[index]) > card_value.index(hand2[index]):
+            return -1
+        elif card_value.index(hand1[index]) < card_value.index(hand2[index]):
+            return 1
+    return 0
+
+def sort_results(results):
+    sorted_results = results.copy() # Create a copy of the original array
+    n = len(sorted_results)
+    while True:
+        swapped = False
+        for index in range(n-1):
+            if sorted_results[index][0] == sorted_results[index+1][0]:
+                comparison = compare_hands(sorted_results[index][2], sorted_results[index+1][2])
+                if comparison == -1:
+                    sorted_results[index], sorted_results[index+1] = sorted_results[index+1], sorted_results[index]
+                    swapped = True
+        if not swapped:
+            break
+    return sorted_results
+
+sorted_results = sort_results(sorted_results)
+
 
 print(sorted_results)
 
 sum = 0
 
+
 for index, res in enumerate(sorted_results):
     sum += (index + 1) * int(res[1])
-
+print("Len", len(sorted_results))
 print(sum)
