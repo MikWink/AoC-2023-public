@@ -52,6 +52,8 @@ def checkFullHouse(hand):
         print("Full house: " + str(hand))
         jack_used = True
         return True
+    elif hand.count('J') >= 2 and checkOnePair(hand):
+        print("Full house: " + str(hand))
 
 def checkThreeOfAKind(hand):
     hand.sort()
@@ -65,7 +67,9 @@ def checkThreeOfAKind(hand):
         print("Three of a kind: " + str(hand))
         jack_used = True
         return True
-    if hand.count('J')
+    if hand.count('J') >= 2:
+        jack_used = True
+        return True
 
 def checkTwoPairs(hand):
     hand.sort()
